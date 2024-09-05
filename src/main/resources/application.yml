@@ -2,12 +2,16 @@ spring:
   cloud:
     azure:
       active-directory:
-        enabled: true;
+        enabled: true
         profile:
-          tenant-id:
+          tenant-id: 61ac6a94-31d3-4709-b7b9-a8a96ad74648
         credential:
-          client-id:
-          client-secret:
+          client-id: aa3e28ee-6dd1-4da4-a2a3-12d124d3fd67
+          client-secret: hZf8Q~FXsvA0h9lKYOsXE5rz6z7QeIXSAJZA6aZH
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jpa.JpaRepositoriesAutoConfiguration
 
 server:
   port: 9191
