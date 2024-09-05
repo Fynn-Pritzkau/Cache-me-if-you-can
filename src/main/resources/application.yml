@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    azure:
+      active-directory:
+        enabled: true;
+        profile:
+          tenant-id: 61ac6a94-31d3-4709-b7b9-a8a96ad74648
+        credential:
+          client-id: aa3e28ee-6dd1-4da4-a2a3-12d124d3fd67
+          client-secret: hZf8Q~FXsvA0h9lKYOsXE5rz6z7QeIXSAJZA6aZH
+
+server:
+  port: 9191
+  forward-headers-strategy: native
