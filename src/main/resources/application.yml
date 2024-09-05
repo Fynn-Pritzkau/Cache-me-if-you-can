@@ -2,7 +2,7 @@ spring:
   cloud:
     azure:
       active-directory:
-        enabled: true;
+        enabled: true
         profile:
           tenant-id:
         credential:
