@@ -4,19 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-public class SecurityConfig implements WebMvcConfigurer
-{
-    @Override
-    public void addCorsMappings(CorsRegistry registry)
-    {
-        registry.addMapping("/**").allowedOrigins("http://localhost:5173", "http://localhost:9191");
-    }
+public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,14 +18,29 @@ public class SecurityConfig implements WebMvcConfigurer
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/logout", "/api/checkAuth").permitAll()
-                        .requestMatchers("/api/user").authenticated() // Protect user endpoint
+                        .requestMatchers("/api/user").authenticated()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("http://localhost:5173/Welcome", true)) // Frontend URL
+                        .defaultSuccessUrl("http://localhost:5173/Welcome", true))
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
-                        .logoutSuccessUrl("/api/login"));
+                        .logoutSuccessUrl("http://localhost:5173/")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID"))
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/logout"));
 
         return http.build();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:5173") // Allow the frontend URL
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow necessary HTTP methods
+                .allowCredentials(true) // Enable credentials (cookies, authorization headers)
+                .allowedHeaders("*") // Allow all headers
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials");
     }
 }

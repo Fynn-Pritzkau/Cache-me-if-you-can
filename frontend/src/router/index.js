@@ -20,20 +20,31 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+const isAuthenticated = async () => {
+  try {
+    const response = await axios.get("http://localhost:9191/api/user", {
+      withCredentials: true
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    axios.get('http://localhost:9191/api/user')
-        .then(() => {
-          console.log('User is authenticated');
-          next();
-        })
-        .catch(() => {
-          console.log('User is not authenticated');
-          next({ name: 'home' });
-        });
+    const authenticated = await isAuthenticated();
+    if (authenticated) {
+      console.log('User is authenticated');
+      next();
+    } else {
+      console.log('User is not authenticated');
+      next({ name: 'home' }); // Redirect to login if not authenticated
+    }
   } else {
     next();
   }
 });
+
 
 export default router

@@ -8,10 +8,6 @@ spring:
         credential:
           client-id: aa3e28ee-6dd1-4da4-a2a3-12d124d3fd67
           client-secret: hZf8Q~FXsvA0h9lKYOsXE5rz6z7QeIXSAJZA6aZH
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.jpa.JpaRepositoriesAutoConfiguration
 
 server:
   port: 9191
