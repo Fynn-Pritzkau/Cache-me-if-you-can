@@ -33,11 +33,9 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const authenticated = await isAuthenticated();
     if (authenticated) {
-      console.log('User is authenticated');
       next();
     } else {
-      console.log('User is not authenticated');
-      next({ name: 'home' }); // Redirect to login if not authenticated
+      next({ name: 'home' });
     }
   } else {
     next();
