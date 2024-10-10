@@ -15,7 +15,7 @@ public class SecurityConfig implements WebMvcConfigurer
     @Override
     public void addCorsMappings(CorsRegistry registry)
     {
-        registry.addMapping("/**").allowedOrigins("http://localhost:9191");
+        registry.addMapping("/**").allowedOrigins("http://localhost:5173", "http://localhost:9191");
     }
 
     @Bean
@@ -23,10 +23,11 @@ public class SecurityConfig implements WebMvcConfigurer
         http
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/logout").permitAll()
+                        .requestMatchers("/api/login", "/api/logout", "/api/checkAuth").permitAll()
+                        .requestMatchers("/api/user").authenticated() // Protect user endpoint
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/welcome", true))
+                        .defaultSuccessUrl("http://localhost:5173/Welcome", true)) // Frontend URL
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutSuccessUrl("/api/login"));

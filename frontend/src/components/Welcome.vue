@@ -8,13 +8,13 @@
 import axios from "axios";
 
 export default {
-  	data() {
-	    return {
-      		user: {}
-	    };
-  	},
+  data() {
+    return {
+      user: {}
+    };
+  },
   mounted() {
-    axios.get('http://localhost:9191/user').then(response => {
+    axios.get('http://localhost:9191/api/user').then(response => {
       this.user = response.data;
     });
   }

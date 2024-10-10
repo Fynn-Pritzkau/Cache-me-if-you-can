@@ -15,6 +15,7 @@
 export default {
   methods: {
     login() {
+      console.log('Login clicked');
       window.location.href = 'http://localhost:9191/oauth2/authorization/azure';
     }
   }
