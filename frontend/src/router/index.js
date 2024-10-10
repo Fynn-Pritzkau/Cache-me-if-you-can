@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 import login from "@/components/login.vue";
 import Welcome from "@/components/Welcome.vue";
 import axios from "axios";
@@ -18,13 +18,11 @@ const router = createRouter({
       meta: { requiresAuth: true }
     }
   ]
-})
+});
 
 const isAuthenticated = async () => {
   try {
-    const response = await axios.get("http://localhost:9191/api/user", {
-      withCredentials: true
-    });
+    await axios.get("http://localhost:9191/api/user", { withCredentials: true });
     return true;
   } catch {
     return false;
@@ -46,5 +44,4 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
-
-export default router
+export default router;
