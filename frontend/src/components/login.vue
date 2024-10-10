@@ -31,7 +31,7 @@ export default {
       console.log('Logout clicked');
       // Clear user data
       localStorage.removeItem('user');
-      window.location.href = 'https://login.microsoftonline.com/61ac6a94-31d3-4709-b7b9-a8a96ad74648/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:5173/';
+      window.location.href = 'http://localhost:9191/api/logout';
     }
   }
 }
