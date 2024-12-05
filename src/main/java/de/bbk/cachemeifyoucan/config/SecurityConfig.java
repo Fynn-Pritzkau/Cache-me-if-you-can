@@ -17,8 +17,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         http
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/logout").permitAll()
-                        .requestMatchers("/api/user").authenticated()
+                        .requestMatchers("/api/login", "/api/logout", "/api/customers").permitAll()
+                        .requestMatchers("/api/user", "/api/customers/**").authenticated()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .defaultSuccessUrl("http://localhost:5173/Welcome", true))
