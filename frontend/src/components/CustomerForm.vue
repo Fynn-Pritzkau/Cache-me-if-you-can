@@ -67,6 +67,8 @@
 <script>
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
+
 export default {
   data() {
     return {
@@ -148,8 +150,16 @@ export default {
   },
 
   // Beim Laden der Seite alle Kunden abrufen
-  created() {
-    this.fetchCustomers();
+  async created() {
+    try {
+      const user = await axios.get('http://localhost:9191/api/user', { withCredentials: true });
+      console.log("Benutzer ist authentifiziert:", user.data);
+      await this.fetchCustomers(); // Kunden laden
+    } catch (error) {
+      console.error("Benutzer ist nicht authentifiziert:", error);
+      alert("Bitte melden Sie sich zuerst an.");
+      window.location.href = 'http://localhost:5173/login'; // Zum Login umleiten
+    }
   }
 };
 </script>
