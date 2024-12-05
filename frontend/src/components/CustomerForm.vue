@@ -1,29 +1,37 @@
 <template>
   <div>
-    <h2>Kundendaten erfassen</h2>
+    <h1 class="main-header">Kundendaten erfassen</h1>
 
-    <!-- Formular für das Hinzufügen oder Bearbeiten eines Kunden -->
     <form @submit.prevent="saveCustomer">
-      <label>Name:</label>
-      <input v-model="customer.name" required />
+      <div class="name-container">
+        <label>Name:</label>
+        <input v-model="customer.name" required />
 
-      <label>Vorname:</label>
-      <input v-model="customer.vorname" required />
+        <label>Vorname:</label>
+        <input v-model="customer.vorname" required>
+      </div>
 
-      <label>Geburtsdatum:</label>
-      <input v-model="customer.geburtsdatum" type="date" required />
+      <div class="birthday-container">
+        <label>Geburtsdatum:</label>
+        <input v-model="customer.geburtsdatum" type="date" required />
+      </div>
 
-      <label>Telefonnummer:</label>
-      <input v-model="customer.telefonnummer" required />
+      <div class="phone-container">
+        <label>Telefonnummer:</label>
+        <input v-model="customer.telefonnummer" required />
+      </div>
 
-      <label>Anschrift:</label>
-      <input v-model="customer.anschrift" required />
+      <div class="address-container">
+        <label>Anschrift:</label>
+        <input v-model="customer.anschrift" required />
+      </div>
 
-      <label>IBAN:</label>
-      <input v-model="customer.iban" required />
-
-      <label>BIC (nur Ausland):</label>
-      <input v-model="customer.bic" />
+      <div class="bankinfo-container">
+        <label>IBAN:</label>
+        <input v-model="customer.iban" required />
+        <label>BIC (nur Ausland):</label>
+        <input v-model="customer.bic" />
+      </div>
 
       <button type="submit">{{ isEditMode ? 'Kundendaten aktualisieren' : 'Kundendaten speichern' }}</button>
     </form>
@@ -62,7 +70,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      customers: [], // Alle Kunden
+      customers: [],
       customer: {
         name: '',
         vorname: '',
@@ -106,7 +114,6 @@ export default {
       }
     },
 
-    // Den Kunden aus der Tabelle bearbeiten (wird in das Formular geladen)
     editCustomer(customer) {
       this.customer = {...customer}; // Werte in das Formular laden
       this.isEditMode = true; // Bearbeitungsmodus aktivieren
@@ -148,7 +155,15 @@ export default {
 </script>
 
 <style scoped>
-/* Füge hier dein CSS hinzu */
+
+.main-header {
+  font-size: 3em;
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center;
+  font-family: sans-serif;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -162,9 +177,37 @@ table th, table td {
 button {
   padding: 5px 10px;
   margin-right: 5px;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
 }
 
 button:hover {
   background-color: #f0f0f0;
 }
+
+div {
+  font-family: sans-serif;
+}
+
+input {
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border-color: #848484;
+  border-style: solid;
+  font-size: 20px;
+}
+
+.bankinfo-container, .address-container, .phone-container, .birthday-container, .name-container {
+  margin-bottom: 5px;
+  margin-left: 5px;
+  font-size: 20px;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 </style>

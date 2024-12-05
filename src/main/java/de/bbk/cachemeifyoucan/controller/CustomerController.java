@@ -31,7 +31,6 @@ public class CustomerController {
     @PutMapping("/{id}")
     public CustomerDao updateCustomer(@PathVariable Long id, @RequestBody CustomerDao customerDetails)
     {
-        System.out.println("test etstq2e1h2bn: ");
         CustomerDao customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
         customer.setName(customerDetails.getName());
