@@ -21,7 +21,8 @@ const router = createRouter({
     {
       path: '/customer-form',
       name: 'customerForm',
-      component: CustomerForm
+      component: CustomerForm,
+      meta: { requiresAuth: true }
     }
   ]
 });

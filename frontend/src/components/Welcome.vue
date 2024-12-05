@@ -46,16 +46,19 @@ export default {
 </script>
 
 <style scoped>
-/* Fade-in Animation */
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s ease;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
 .container {
   font-family: sans-serif;
 }
+
 /* General Layout */
 .dashboard-header {
   display: flex;

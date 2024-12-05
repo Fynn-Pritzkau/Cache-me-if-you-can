@@ -1,68 +1,79 @@
 <template>
-  <div>
-    <h1 class="main-header">Kundendaten erfassen</h1>
+  <div class="container">
+    <div class="main-header">
+      <h1>Kundendaten verwalten</h1>
+      <button @click="goToModule('welcome')">Dashboard</button>
+    </div>
 
-    <form @submit.prevent="saveCustomer">
-      <div class="name-container">
-        <label>Name:</label>
-        <input v-model="customer.name" required />
+    <div class="form-container">
+      <h2>{{ isEditMode ? 'Kundendaten bearbeiten' : 'Neuen Kunden hinzufügen' }}</h2>
+      <form @submit.prevent="saveCustomer">
+        <fieldset>
+          <legend>Persönliche Daten</legend>
+          <label for="name">Name:</label>
+          <input id="name" v-model="customer.name" required />
 
-        <label>Vorname:</label>
-        <input v-model="customer.vorname" required>
-      </div>
+          <label for="vorname">Vorname:</label>
+          <input id="vorname" v-model="customer.vorname" required />
 
-      <div class="birthday-container">
-        <label>Geburtsdatum:</label>
-        <input v-model="customer.geburtsdatum" type="date" required />
-      </div>
+          <label for="geburtsdatum">Geburtsdatum:</label>
+          <input id="geburtsdatum" type="date" v-model="customer.geburtsdatum" required />
+        </fieldset>
 
-      <div class="phone-container">
-        <label>Telefonnummer:</label>
-        <input v-model="customer.telefonnummer" required />
-      </div>
+        <fieldset>
+          <legend>Kontaktinformationen</legend>
+          <label for="telefonnummer">Telefonnummer:</label>
+          <input id="telefonnummer" v-model="customer.telefonnummer" required />
 
-      <div class="address-container">
-        <label>Anschrift:</label>
-        <input v-model="customer.anschrift" required />
-      </div>
+          <label for="anschrift">Anschrift:</label>
+          <input id="anschrift" v-model="customer.anschrift" required />
+        </fieldset>
 
-      <div class="bankinfo-container">
-        <label>IBAN:</label>
-        <input v-model="customer.iban" required />
-        <label>BIC (nur Ausland):</label>
-        <input v-model="customer.bic" />
-      </div>
+        <fieldset>
+          <legend>Bankdaten</legend>
+          <label for="iban">IBAN:</label>
+          <input id="iban" v-model="customer.iban" required />
 
-      <button type="submit">{{ isEditMode ? 'Kundendaten aktualisieren' : 'Kundendaten speichern' }}</button>
-    </form>
+          <label for="bic">BIC (nur Ausland):</label>
+          <input id="bic" v-model="customer.bic" />
+        </fieldset>
 
-    <!-- Tabelle mit allen Kunden -->
-    <h3>Alle Kunden</h3>
-    <table>
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Vorname</th>
-        <th>Geburtsdatum</th>
-        <th>Telefonnummer</th>
-        <th>Aktionen</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(cust, index) in customers" :key="cust.id">
-        <td>{{ cust.name }}</td>
-        <td>{{ cust.vorname }}</td>
-        <td>{{ cust.geburtsdatum }}</td>
-        <td>{{ cust.telefonnummer }}</td>
-        <td>
-          <button @click="editCustomer(cust)">Bearbeiten</button>
-          <button @click="deleteCustomer(cust.id)">Löschen</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        <div class="form-buttons">
+          <button type="submit">{{ isEditMode ? 'Aktualisieren' : 'Speichern' }}</button>
+          <button type="button" @click="resetForm" v-if="isEditMode">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-container">
+      <h2>Alle Kunden</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Vorname</th>
+          <th>Geburtsdatum</th>
+          <th>Telefonnummer</th>
+          <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(cust, index) in customers" :key="cust.id">
+          <td>{{ cust.name }}</td>
+          <td>{{ cust.vorname }}</td>
+          <td>{{ cust.geburtsdatum }}</td>
+          <td>{{ cust.telefonnummer }}</td>
+          <td>
+            <button @click="editCustomer(cust)">✏️ Bearbeiten</button>
+            <button @click="deleteCustomer(cust.id)">🗑️ Löschen</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -82,12 +93,11 @@ export default {
         iban: '',
         bic: ''
       },
-      isEditMode: false, // Flag, ob wir einen Datensatz bearbeiten oder neu anlegen
-      currentCustomerId: null // Die ID des aktuell bearbeiteten Kunden
+      isEditMode: false,
+      currentCustomerId: null
     };
   },
   methods: {
-    // Kunden aus der API laden
     async fetchCustomers() {
       try {
         const response = await axios.get('http://localhost:9191/api/customers');
@@ -97,43 +107,38 @@ export default {
       }
     },
 
-    // Neue Kunden speichern oder bestehende aktualisieren
     async saveCustomer() {
       try {
         if (this.isEditMode) {
-          // Kunden aktualisieren
           await axios.put(`http://localhost:9191/api/customers/${this.currentCustomerId}`, this.customer);
           alert("Kundendaten erfolgreich aktualisiert!");
         } else {
-          // Neuen Kunden hinzufügen
           await axios.post('http://localhost:9191/api/customers', this.customer);
           alert("Kundendaten erfolgreich gespeichert!");
         }
         this.resetForm();
-        this.fetchCustomers(); // Nach dem Speichern die Liste aktualisieren
+        this.fetchCustomers();
       } catch (error) {
         console.error("Fehler beim Speichern der Kundendaten:", error);
       }
     },
 
     editCustomer(customer) {
-      this.customer = {...customer}; // Werte in das Formular laden
-      this.isEditMode = true; // Bearbeitungsmodus aktivieren
-      this.currentCustomerId = customer.id; // ID des zu bearbeitenden Kunden speichern
+      this.customer = {...customer};
+      this.isEditMode = true;
+      this.currentCustomerId = customer.id;
     },
 
-    // Einen Kunden löschen
     async deleteCustomer(customerId) {
       try {
         await axios.delete(`http://localhost:9191/api/customers/${customerId}`);
         alert("Kunde erfolgreich gelöscht!");
-        this.fetchCustomers(); // Nach dem Löschen die Liste aktualisieren
+        this.fetchCustomers();
       } catch (error) {
         console.error("Fehler beim Löschen des Kunden:", error);
       }
     },
 
-    // Das Formular zurücksetzen
     resetForm() {
       this.customer = {
         name: '',
@@ -144,80 +149,97 @@ export default {
         iban: '',
         bic: ''
       };
-      this.isEditMode = false; // Bearbeitungsmodus deaktivieren
-      this.currentCustomerId = null; // Die aktuelle Kunden-ID zurücksetzen
-    }
-  },
+      this.isEditMode = false;
+      this.currentCustomerId = null;
+    },
 
-  // Beim Laden der Seite alle Kunden abrufen
+    goToModule(module) {
+      window.location.href = `http://localhost:5173/${module}`;
+    },
+  },
   async created() {
-    try {
-      const user = await axios.get('http://localhost:9191/api/user', { withCredentials: true });
-      console.log("Benutzer ist authentifiziert:", user.data);
-      await this.fetchCustomers(); // Kunden laden
-    } catch (error) {
-      console.error("Benutzer ist nicht authentifiziert:", error);
-      alert("Bitte melden Sie sich zuerst an.");
-      window.location.href = 'http://localhost:5173/login'; // Zum Login umleiten
-    }
-  }
+    await this.fetchCustomers();
+  },
 };
 </script>
 
 <style scoped>
 
-.main-header {
-  font-size: 3em;
-  margin-bottom: 40px;
-  width: 100%;
-  text-align: center;
+.container {
+  margin: 0 auto;
   font-family: sans-serif;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+}
+
+.main-header h1 {
+  font-size: 2em;
+}
+
+.form-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+  font-size: 20px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+input {
+  width: 100%;
+  padding-bottom: 7px;
+  padding-top: 7px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.table-container {
+  margin-top: 30px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 table th, table td {
+  text-align: left;
   padding: 10px;
-  border: 1px solid #ddd;
-}
-
-button {
-  padding: 5px 10px;
-  margin-right: 5px;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #f0f0f0;
-}
-
-div {
-  font-family: sans-serif;
-}
-
-input {
-  padding: 5px;
-  margin-bottom: 10px;
-  width: 100%;
-  border-radius: 5px;
-  border-color: #848484;
-  border-style: solid;
-  font-size: 20px;
-}
-
-.bankinfo-container, .address-container, .phone-container, .birthday-container, .name-container {
-  margin-bottom: 5px;
-  margin-left: 5px;
-  font-size: 20px;
-  align-items: center;
-  justify-content: space-between;
-  display: flex;
-  flex-wrap: wrap;
+  border-bottom: 1px solid #ddd;
 }
 
 </style>
