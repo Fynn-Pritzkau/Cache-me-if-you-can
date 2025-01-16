@@ -1,11 +1,15 @@
 <template>
-  <div>
-    <h2>CSV Datei Hochladen</h2>
-    <form @submit.prevent="uploadCsv">
-      <input type="file" @change="handleFile" accept=".csv" />
-      <button type="submit">Hochladen</button>
-    </form>
-    <p v-if="message">{{ message }}</p>
+  <div class="container">
+       <div class="main-header">
+            <h1>CSV Datei Hochladen</h1>
+            <button @click="goToModule('welcome')">Dashboard</button>
+       </div>
+       <div class="content">
+          <form @submit.prevent="uploadCsv">
+           <input type="file" @change="handleFile" accept=".csv" />
+           <button type="submit">Hochladen</button>
+          </form>
+       </div>
   </div>
 </template>
 
@@ -23,9 +27,14 @@ export default {
     handleFile(event) {
       this.file = event.target.files[0];
     },
+
+     goToModule(module) {
+       window.location.href = `http://localhost:5173/${module}`;
+     },
+
     async uploadCsv() {
       if (!this.file) {
-        this.message = "Bitte wählen Sie eine Datei aus!";
+        alert("Bitte wählen Sie eine Datei aus!");
         return;
       }
       const formData = new FormData();
@@ -36,9 +45,9 @@ export default {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
         });
-        this.message = response.data;
+        alert("" + response.data);
       } catch (error) {
-        this.message = "Fehler beim Hochladen: " + error.response?.data || error.message;
+        alert("Fehler beim Hochladen: " + error.response?.data || error.message);
       }
     },
   },
@@ -48,5 +57,39 @@ export default {
 <style scoped>
 h2 {
   color: #333;
+}
+
+.main-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     background-color: #2c3e50;
+     color: white;
+     padding: 10px 20px;
+     margin-bottom: 30px;
+}
+
+.container {
+     margin: 0 auto;
+     font-family: sans-serif;
+}
+
+.content {
+     background-color: #f9f9f9;
+     padding: 20px;
+     border-radius: 10px;
+     margin-bottom: 30px;
+}
+
+button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+}
+
+button:hover {
+     background-color: #007bff;
+     color: white;
 }
 </style>
