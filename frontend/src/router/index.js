@@ -3,6 +3,7 @@ import login from "@/components/login.vue";
 import Welcome from "@/components/Welcome.vue";
 import axios from "axios";
 import CustomerForm from "@/components/CustomerForm.vue";
+import CsvUpload from "@/components/CsvUpload.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,12 @@ const router = createRouter({
       path: '/customer-form',
       name: 'customerForm',
       component: CustomerForm,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/csv-upload',
+      name: 'csvUpload',
+      component: CsvUpload,
       meta: { requiresAuth: true }
     }
   ]

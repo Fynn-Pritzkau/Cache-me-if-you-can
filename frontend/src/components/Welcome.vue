@@ -17,7 +17,7 @@
             <button class="module-button" @click="goToModule('plants')">
               Anlagendaten
             </button>
-            <button class="module-button" @click="goToModule('import')">
+            <button class="module-button" @click="goToModule('csv-upload')">
               Datenimport
             </button>
             <button class="module-button" @click="goToModule('maintenance')">
